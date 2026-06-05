@@ -7,15 +7,14 @@ CHAT_ID = os.environ["CHAT_ID"]
 url = "https://api.coingecko.com/api/v3/coins/list/new"
 
 response = requests.get(url)
+
+print("Status Code:", response.status_code)
+
 coins = response.json()
 
-message = "🆕 Latest CoinGecko Listings\n\n"
+print(coins)
 
-if isinstance(coins, list):
-    for coin in coins[:10]:
-        message += f"• {coin['name']} ({coin['symbol']})\n"
-else:
-    message += str(coins)
+message = "Test Message"
 
 telegram_url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
 
