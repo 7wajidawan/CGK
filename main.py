@@ -6,12 +6,16 @@ CHAT_ID = os.environ["CHAT_ID"]
 
 url = "https://api.coingecko.com/api/v3/coins/list/new"
 
-coins = requests.get(url).json()
+response = requests.get(url)
+coins = response.json()
 
 message = "🆕 Latest CoinGecko Listings\n\n"
 
-for coin in coins[:10]:
-    message += f"• {coin['name']} ({coin['symbol']})\n"
+if isinstance(coins, list):
+    for coin in coins[:10]:
+        message += f"• {coin['name']} ({coin['symbol']})\n"
+else:
+    message += str(coins)
 
 telegram_url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
 
