@@ -14,7 +14,15 @@ def send_telegram(message):
 
 url = "https://api.coingecko.com/api/v3/coins/list/new"
 response = requests.get(url)
-coins = response.json()
+data = response.json()
+
+# Handle both list and dict response
+if isinstance(data, list):
+    coins = data
+elif isinstance(data, dict):
+    coins = data.get("coins", data.get("data", []))
+else:
+    coins = []
 
 for coin in coins[:10]:
     message = (
