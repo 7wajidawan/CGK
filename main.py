@@ -12,20 +12,28 @@ def send_telegram(message):
         "parse_mode": "HTML"
     })
 
-# CoinPaprika - completely free, no API key
 url = "https://api.coinpaprika.com/v1/coins"
 response = requests.get(url)
 coins = response.json()
 
-# Sort by newest (highest id number = newest)
-new_coins = sorted(coins, key=lambda x: x["rank"] == 0, reverse=True)[:10]
+new_coins = [c for c in coins if c["rank"] == 0][:5]
 
 for coin in new_coins:
+    ticker_url = f"https://api.coinpaprika.com/v1/tickers/{coin['id']}"
+    ticker = requests.get(ticker_url).json()
+
+    price = ticker.get("quotes", {}).get("USD", {}).get("price", "N/A")
+    volume = ticker.get("quotes", {}).get("USD", {}).get("volume_24h", "N/A")
+    first_data = ticker.get("first_data_at", "N/A")[:10]
+
     message = (
         f"🆕 <b>New Listing Alert!</b>\n"
-        f"🪙 Name: {coin['name']}\n"
-        f"💎 Symbol: {coin['symbol']}\n"
-        f"🔗 Type: {coin['type']}"
+        f"🪙 <b>Name:</b> {coin['name']}\n"
+        f"💎 <b>Symbol:</b> {coin['symbol']}\n"
+        f"🔗 <b>Type:</b> {coin['type']}\n"
+        f"📅 <b>First Listed:</b> {first_data}\n"
+        f"💰 <b>Price:</b> ${price}\n"
+        f"📊 <b>24h Volume:</b> ${volume}"
     )
     send_telegram(message)
 
