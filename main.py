@@ -22,18 +22,23 @@ for coin in new_coins:
     ticker_url = f"https://api.coinpaprika.com/v1/tickers/{coin['id']}"
     ticker = requests.get(ticker_url).json()
 
-    price = ticker.get("quotes", {}).get("USD", {}).get("price", "N/A")
+    detail_url = f"https://api.coinpaprika.com/v1/coins/{coin['id']}"
+    detail = requests.get(detail_url).json()
+
     volume = ticker.get("quotes", {}).get("USD", {}).get("volume_24h", "N/A")
-    first_data = ticker.get("first_data_at", "N/A")[:10]
+
+    contracts = detail.get("contracts", [])
+    contract_address = contracts[0].get("contract", "N/A") if contracts else "N/A"
+
+    coin_link = f"https://coinpaprika.com/coin/{coin['id']}"
 
     message = (
         f"🆕 <b>New Listing Alert!</b>\n"
         f"🪙 <b>Name:</b> {coin['name']}\n"
         f"💎 <b>Symbol:</b> {coin['symbol']}\n"
-        f"🔗 <b>Type:</b> {coin['type']}\n"
-        f"📅 <b>First Listed:</b> {first_data}\n"
-        f"💰 <b>Price:</b> ${price}\n"
-        f"📊 <b>24h Volume:</b> ${volume}"
+        f"📊 <b>24h Volume:</b> ${volume}\n"
+        f"📋 <b>Contract:</b> <code>{contract_address}</code>\n"
+        f"🔗 <b>Link:</b> {coin_link}"
     )
     send_telegram(message)
 
