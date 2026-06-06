@@ -27,3 +27,6 @@ for coin in coins[:10]:
     send_telegram(message)
 
 print("Done")
+
+
+# Updated v2
