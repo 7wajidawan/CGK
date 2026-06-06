@@ -1,8 +1,8 @@
 import requests
 import os
 
-BOT_TOKEN = os.environ.get("8483160777:AAG872i0TMAxuAXcB6ZhqjcooPSoapo_y-U")
-CHAT_ID = os.environ.get("534605127")
+BOT_TOKEN = os.environ.get("BOT_TOKEN")
+CHAT_ID = os.environ.get("CHAT_ID")
 
 url = "https://api.coingecko.com/api/v3/coins/list/new"
 response = requests.get(url)
