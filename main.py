@@ -19,6 +19,13 @@ params = {"limit": 10}
 
 response = requests.get(url, headers=headers, params=params)
 data = response.json()
+
+print("Response:", data)
+
+if "data" not in data:
+    send_telegram(f"⚠️ API Error: {data}")
+    exit()
+
 coins = data["data"]
 
 for coin in coins:
