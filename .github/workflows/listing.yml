@@ -2,8 +2,11 @@ name: CoinGecko Listings
 
 on:
   schedule:
-    - cron: '*/30 * * * *'
+    - cron: '0 * * * *'
   workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   run:
@@ -22,4 +25,3 @@ jobs:
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
-          CMC_API_KEY: ${{ secrets.CMC_API_KEY }}
